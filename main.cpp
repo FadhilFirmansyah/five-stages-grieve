@@ -11,13 +11,14 @@ void actionThymous(int extra_hp);
 bool isActionProsfora();
 void actionProsfora();
 bool isActionKatathlipsi();
-void actionKatathlipsi(vector<string>& items, string& picked_item, int extra_hp);
+void actionKatathlipsi(vector<string>& items, int extra_hp);
 
 int main() {
     bool final_action = 'y';
     vector<string> items = {"Pedang"};
     vector<string> items_pool = {"Armor", "Koin Emas Kuno"};
     string picked_item = "";
+    int extra_hp = 0;
 
     cout << "SELAMAT DATANG DI EARTH ODYSSEY" << endl << endl;
     cout << "Icarus merupakan seoarang petualang dan anak tunggal, Ibunya yang membesarkan seorang diri jatuh sakit yang tidak diketahui dan kondisi yang semakin waktu semakin parah" << endl;
@@ -25,53 +26,59 @@ int main() {
 
     if (isActionArnoumai()) {
         actionArnoumai(items, items_pool, picked_item);
+
+        cout << "Tiba Icarus pada kaki gunung yang akan didaki untuk mengambil tumbuhan yang ia butuhkan saat ini" << endl;
+
+        if (picked_item == "Armor") {
+            extra_hp = 1;
+        }
+
+        if (isActionThymous()) {
+            actionThymous(extra_hp);
+
+            cout << "Di tengah perjalanan Icarus menemui seorang kakek pengelana bernama Prosforá yang menawarkan Icarus koin aneh" << endl;
+
+            if (isActionProsfora()) {
+                auto coin = find(items_pool.begin(), items_pool.end(), "Koin Emas Kuno");
+                if (coin != items_pool.end()) {
+                    picked_item = *coin;
+                    items.push_back(picked_item);
+                    cout << "Icarus menerima item: " << picked_item << endl;
+                    items_pool.erase(coin);
+                }
+
+                cout << endl << "Kebingungan yang mengisi kepala Icarus membuat bertanya kepada dirinya sendiri apakah perbuatan yang ia lakukan sejauh ini benar atau apa...." << endl;
+                cout << "Hingga akhirnya tiba pada puncak gunung yang selama perjalanan ini berlangsung...." << endl;
+                cout << "Namun siapa sangka bahwasannya terdapat sosok malaikat pencabut nyawa yang serupa dengan mendiang ayah Icarus yang bernama Katáthlipsi" << endl;
+
+                if (isActionKatathlipsi()) {
+                    actionKatathlipsi(items, extra_hp);
+
+                    cout << "Tepat di depan mata terdapat tumbuhan Melati Putih yang menjadi pusat kehidupan alam sekitar" << endl;
+                    cout << "Disinilah moral beban Icarus diuji dengan mengkorbankan apa yang semestinya ada atau melawan waktu yang terus berputar" << endl;
+                    cout << endl << "[input (y/n)] MENGAMBIL MELATI ATAU MEMBIARKAN APA YANG SUDAH PASTI: ";
+                    cin >> final_action;
+
+                    if (final_action == 'y') {
+                        cout << "Icarus melakukan perjalanan pulang dengan seiring ia berjalan melihat tumbuhan mati satu per satu" << endl << "untuk menyembuhkan sakit seorang malaikat yang membawa kehangatan pertama kali Icarus menghirup udara pada dunia" << endl;
+                    }else {
+                        cout << "Icarus terus meneteskan air mata selama perjalanan hingga tiba ke rumah ia memeluk erat hangat Ibu yang sudah tiada" << endl;
+                    }
+                } else {
+                    cout << endl << "Icarus tiba ke rumah dan melihat satu-satu nya pembawa kehidupan Icarus pada dunia telah tiada dan memeluk Ibu nya serta tangis tiada henti silir berganti" << endl;
+                    cout << "FIN" << endl;
+                }
+            } else {
+                cout << endl << "Icarus dengan cepat menuruni gunung menuju rumah dan melihat Ibu nya yang sakit terbaring di kasur sedang ter tidur lelap" << endl;
+                cout << "FIN" << endl;
+            }
+        } else {
+            cout << endl << "Gegas Icarus sampai rumah, ia melihat Ibu nya sedang menghangatkan tungku api agar malam hari terasa hangat" << endl;
+            cout << "FIN" << endl;
+        }
     } else {
         cout << endl << "Tepat masuk ke rumah Icarus mendapati Ibunya sedang memasak makanan favoritnya dengan kondisi Ibu yang memprihatinkan" << endl;
         cout << "FIN" << endl;
-    }
-
-    cout << "Tiba Icarus pada kaki gunung yang akan didaki untuk mengambil tumbuhan yang ia butuhkan saat ini" << endl;
-
-    int extra_hp = (picked_item == "Armor") ? 1 : 0;
-
-    if (isActionThymous()) {
-        actionThymous(extra_hp);
-    } else {
-        cout << endl << "Gegas Icarus sampai rumah, ia melihat Ibu nya sedang menghangatkan tungku api agar malam hari terasa hangat" << endl;
-        cout << "FIN" << endl;
-    }
-
-    cout << "Di tengah perjalanan Icarus menemui seorang kakek pengelana bernama Prosforá yang menawarkan Icarus koin aneh" << endl;
-
-    if (isActionProsfora()) {
-        picked_item = "Koin Emas Kuno";
-        items.push_back(picked_item);
-        cout << "Icarus menerima item: " << picked_item << endl;
-    } else {
-        cout << endl << "Icarus dengan cepat menuruni gunung menuju rumah dan melihat Ibu nya yang sakit terbaring di kasur sedang ter tidur lelap" << endl;
-        cout << "FIN" << endl;
-    }
-
-    cout << endl << "Kebingungan yang mengisi kepala Icarus membuat bertanya kepada dirinya sendiri apakah perbuatan yang ia lakukan sejauh ini benar atau apa...." << endl;
-    cout << "Hingga akhirnya tiba pada puncak gunung yang selama perjalanan ini berlangsung...." << endl;
-    cout << "Namun siapa sangka bahwasannya terdapat sosok malaikat pencabut nyawa yang serupa dengan mendiang ayah Icarus yang bernama Katáthlipsi" << endl;
-
-    if (isActionKatathlipsi()) {
-        actionKatathlipsi(items, picked_item, extra_hp);
-    } else {
-        cout << endl << "Icarus tiba ke rumah dan melihat satu-satu nya pembawa kehidupan Icarus pada dunia telah tiada dan memeluk Ibu nya serta tangis tiada henti silir berganti" << endl;
-        cout << "FIN" << endl;
-    }
-
-    cout << "Tepat di depan mata terdapat tumbuhan Melati Putih yang menjadi pusat kehidupan alam sekitar" << endl;
-    cout << "Disinilah moral beban Icarus diuji dengan mengkorbankan apa yang semestinya ada atau melawan waktu yang terus berputar" << endl;
-    cout << endl << "[input (y/n)] MENGAMBIL MELATI ATAU MEMBIARKAN APA YANG SUDAH PASTI: ";
-    cin >> final_action;
-
-    if (final_action == 'y') {
-        cout << "Icarus melakukan perjalanan pulang dengan seiring ia berjalan melihat tumbuhan mati satu per satu" << endl << "untuk menyembuhkan sakit seorang malaikat yang membawa kehangatan pertama kali Icarus menghirup udara pada dunia" << endl;
-    }else {
-        cout << "Icarus terus meneteskan air mata selama perjalanan hingga tiba ke rumah ia memeluk erat hangat Ibu yang sudah tiada" << endl;
     }
 
     return 0;
@@ -171,7 +178,7 @@ void actionThymous(int extra_hp) {
     char is_action = 'y';
     bool is_win = false;
     int hp_icarus = 5 + extra_hp;
-    int hp_thymous = 4;
+    int hp_thymous = 5;
 
     random_device rd;
     mt19937 gen(rd());
@@ -240,7 +247,7 @@ bool isActionKatathlipsi() {
     return is_fight == 'y';
 }
 
-void actionKatathlipsi(vector<string>& items, string& picked_item, int extra_hp) {
+void actionKatathlipsi(vector<string>& items, int extra_hp) {
     char is_action = 'y';
     bool is_win = false;
     bool revived = false;
@@ -286,7 +293,8 @@ void actionKatathlipsi(vector<string>& items, string& picked_item, int extra_hp)
             cout << "Katáthlipsi lengah..." << endl << endl;
         }
 
-        if (hp_icarus <= 0 && !revived && find(items.begin(), items.end(), "Koin Emas Kuno") != items.end()) {
+        auto coin_it = find(items.begin(), items.end(), "Koin Emas Kuno");
+        if (hp_icarus <= 0 && !revived && coin_it != items.end()) {
             char use_coin;
             cout << "Icarus tumbang... Namun Koin Emas Kuno mulai bersinar terang." << endl;
             cout << "Gunakan Koin Emas Kuno untuk hidup kembali? (y/n): ";
@@ -295,9 +303,8 @@ void actionKatathlipsi(vector<string>& items, string& picked_item, int extra_hp)
             if (use_coin == 'y') {
                 hp_icarus = 5 + extra_hp;
                 revived = true;
+                items.erase(coin_it);
                 cout << "Kekuatan misterius membawa Icarus kembali hidup! Pertarungan berlanjut..." << endl;
-
-                items.erase(remove(items.begin(), items.end(), "Koin Emas Kuno"), items.end());
             } else {
                 break;
             }
