@@ -5,22 +5,23 @@
 using namespace std;
 
 bool isActionArnoumai();
-void actionArnoumai();
+void actionArnoumai(vector<string>& items, vector<string>& items_pool, string& picked_item);
 bool isActionThymous();
-void actionThymous();
+void actionThymous(int extra_hp);
 bool isActionProsfora();
 void actionProsfora();
 
 int main() {
     vector<string> items = {"Pedang"};
     vector<string> items_pool = {"Armor", "Koin Emas Kuno", "Elixir", "Melati Putih"};
+    string picked_item = "";
 
     cout << "SELAMAT DATANG DI EARTH ODYSSEY" << endl << endl;
     cout << "Icarus merupakan seoarang petualang dan anak tunggal, Ibunya yang membesarkan seorang diri jatuh sakit yang tidak diketahui dan kondisi yang semakin waktu semakin parah" << endl;
     cout << "Konon cerita terdapat tumbuhan Melati yang memiliki inti sari dari kehidupan alam di puncak gunung, Icarus gegas berangkat tuk mengambil tumbuhan tersebut" << endl;
 
     if (isActionArnoumai()) {
-        actionArnoumai();
+        actionArnoumai(items, items_pool, picked_item);
     } else {
         cout << endl << "Tepat masuk ke rumah Icarus mendapati Ibunya sedang memasak makanan favoritnya dengan kondisi Ibu yang memprihatinkan" << endl;
         cout << "FIN" << endl;
@@ -28,8 +29,9 @@ int main() {
 
     cout << "Tiba Icarus pada kaki gunung yang akan didaki untuk mengambil tumbuhan yang ia butuhkan saat ini" << endl;
 
+    int extra_hp = (picked_item == "Armor") ? 1 : 0;
     if (isActionThymous()) {
-        actionThymous();
+        actionThymous(extra_hp);
     } else {
         cout << endl << "Gegas Icarus sampai rumah, ia melihat Ibu nya sedang menghangatkan tungku api agar malam hari terasa hangat" << endl;
         cout << "FIN" << endl;
@@ -37,44 +39,31 @@ int main() {
 
     cout << "Di tengah perjalanan Icarus menemui seorang kakek pengelana bernama Prosforá yang menawarkan Icarus koin aneh" << endl;
 
+    if (isActionProsfora()) {
+        picked_item = "Koin Emas Kuno";
+        items.push_back(picked_item);
+        cout << "Icarus menerima item: " << picked_item << endl;
+    } else {
+        cout << endl << "Icarus dengan cepat menuruni gunung menuju rumah dan melihat Ibu nya yang sakit terbaring di kasur sedang ter tidur lelap" << endl;
+        cout << "FIN" << endl;
+    }
+
+    cout << endl << "Kebingungan yang mengisi kepala Icarus membuat bertanya kepada dirinya sendiri apakah perbuatan yang ia lakukan sejauh ini benar atau apa...." << endl;
+    cout << "Hingga akhirnya tiba pada puncak gunung yang selama perjalanan ini berlangsung...." << endl;
+    cout << "Namun siapa sangka bahwasannya terdapat sosok malaikat pencabut nyawa yang serupa dengan mendiang ayah Icarus yang bernama Katáthlipsi" << endl;
 
     return 0;
 }
 
 bool isActionArnoumai() {
-    cout << endl << "Pada perjalanan awal Icarus menemui raksasa bernama Arnoúmai yang menghalangi perjalanan menuju puncak gunung" << endl;
-
+    cout << "Pada perjalanan awal Icarus menemui raksasa bernama Arnoúmai yang menghalangi perjalanan menuju puncak gunung" << endl;
     char is_fight = 'y';
-
     cout << "[input (y/n)] Melawan Arnoúmai atau Pulang?: ";
     cin >> is_fight;
-
     return is_fight == 'y';
 }
 
-bool isActionThymous() {
-    cout << endl << "Dengan kelengahan Icarus suatu monster ras mimic bernama Thymós meniru perawakan Icarus, Ia menghadapi Thymós untuk mempercepat waktu" << endl;
-
-    char is_fight = 'y';
-
-    cout << "[input (y/n)] Melawan Thymós atau Pulang?: ";
-    cin >> is_fight;
-
-    return is_fight == 'y';
-}
-
-bool isActionProsfora() {
-    cout << endl << "\"Tiada nyawa yang bisa digantikan oleh nilai materi, ambilah koin ini untuk menolak takdir yang sudah pasti\" ucap Prosforá pada Icarus" << endl;
-
-    char is_fight = 'y';
-
-    cout << "[input (y/n)] Terima pemberian Prosforá atau pulang?: ";
-    cin >> is_fight;
-
-    return is_fight == 'y';
-}
-
-void actionArnoumai() {
+void actionArnoumai(vector<string>& items, vector<string>& items_pool, string& picked_item) {
     char is_action = 'y';
     bool is_win = false;
     int hp_icarus = 5;
@@ -95,7 +84,6 @@ void actionArnoumai() {
 
         cout << "[input (1/2)] Serang / Berlindung?: ";
         cin >> is_action;
-
         bool is_defending = (is_action == '2');
 
         if (is_action == '1') {
@@ -104,17 +92,17 @@ void actionArnoumai() {
         } else if (is_defending) {
             cout << endl << "Icarus bersiap untuk berlindung..." << endl;
         } else {
-            cout << "Pilihan tidak dikenali! Icarus ragu dan kehilangan kesempatan..." << endl;
+            cout << endl << "Pilihan tidak dikenali! Icarus ragu dan kehilangan kesempatan..." << endl;
         }
 
-        int arnoumai_move = enemy_choice(gen);
-        if (arnoumai_move == 0) {
+        int move = enemy_choice(gen);
+        if (move == 0) {
             cout << "Arnoúmai menyerang!" << endl;
             if (!is_defending) {
                 hp_icarus--;
                 cout << "Serangan mengenai Icarus!" << endl << endl;
             } else {
-                cout << "Icarus berhasil menahan serangan" << endl;
+                cout << "Icarus berhasil menahan serangan" << endl << endl;
             }
         } else {
             cout << "Arnoúmai lengah..." << endl << endl;
@@ -125,16 +113,38 @@ void actionArnoumai() {
 
     cout << endl;
     if (is_win) {
-        cout << "Icarus berhasil mengalahkan Arnoúmai dan melanjutkan perjalanan" << endl;
+        char take_item = 'n';
+        cout << "Pertempuran dimenangkan Icarus dengan menumbangkan Arnoúmai" << endl;
+        cout << "Arnoúmai menjatuhkan Armor. Apakah Icarus ingin mengambilnya? (y/n): ";
+        cin >> take_item;
+
+        if (take_item == 'y') {
+            picked_item = "Armor";
+            items.push_back(picked_item);
+            cout << "Icarus mengambil item: " << picked_item << endl << endl;
+        } else {
+            cout << "Icarus memilih untuk tidak mengambil apa pun." << endl << endl;
+        }
+
     } else {
         cout << "Icarus tumbang dalam pertarungan..." << endl;
     }
+
+    cout << "Icarus berhasil mengalahkan Arnoúmai dan melanjutkan perjalanan" << endl;
 }
 
-void actionThymous() {
+bool isActionThymous() {
+    cout << "Dengan kelengahan Icarus suatu monster ras mimic bernama Thymós meniru perawakan Icarus, Ia menghadapi Thymós untuk mempercepat waktu" << endl;
+    char is_fight = 'y';
+    cout << "[input (y/n)] Melawan Thymós atau Pulang?: ";
+    cin >> is_fight;
+    return is_fight == 'y';
+}
+
+void actionThymous(int extra_hp) {
     char is_action = 'y';
     bool is_win = false;
-    int hp_icarus = 6;
+    int hp_icarus = 5 + extra_hp;
     int hp_thymous = 4;
 
     random_device rd;
@@ -152,7 +162,6 @@ void actionThymous() {
 
         cout << "[input (1/2)] Serang / Berlindung?: ";
         cin >> is_action;
-
         bool is_defending = (is_action == '2');
 
         if (is_action == '1') {
@@ -161,17 +170,17 @@ void actionThymous() {
         } else if (is_defending) {
             cout << endl << "Icarus bersiap untuk berlindung..." << endl;
         } else {
-            cout << "Pilihan tidak dikenali! Icarus ragu dan kehilangan kesempatan..." << endl;
+            cout << endl << "Pilihan tidak dikenali! Icarus ragu dan kehilangan kesempatan..." << endl;
         }
 
-        int thymous_move = enemy_choice(gen);
-        if (thymous_move == 0) {
+        int move = enemy_choice(gen);
+        if (move == 0) {
             cout << "Thymós menyerang!" << endl;
             if (!is_defending) {
                 hp_icarus--;
                 cout << "Serangan mengenai Icarus!" << endl << endl;
             } else {
-                cout << "Icarus berhasil menahan serangan" << endl;
+                cout << "Icarus berhasil menahan serangan" << endl << endl;
             }
         } else {
             cout << "Thymós lengah..." << endl << endl;
@@ -188,6 +197,10 @@ void actionThymous() {
     }
 }
 
-void actionProsfora() {
-
+bool isActionProsfora() {
+    cout << "\"Tiada nyawa yang bisa digantikan oleh nilai materi, ambilah koin ini untuk menolak takdir yang sudah pasti\" ucap Prosforá pada Icarus" << endl;
+    char is_fight = 'y';
+    cout << "[input (y/n)] Terima pemberian Prosforá atau pulang?: ";
+    cin >> is_fight;
+    return is_fight == 'y';
 }
