@@ -1,0 +1,3 @@
+/Users/insomnia/Documents/Semester 6/Pemrograman Game/project-uts/cmake-build-debug/CMakeFiles/project_uts.dir
+/Users/insomnia/Documents/Semester 6/Pemrograman Game/project-uts/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/insomnia/Documents/Semester 6/Pemrograman Game/project-uts/cmake-build-debug/CMakeFiles/rebuild_cache.dir
