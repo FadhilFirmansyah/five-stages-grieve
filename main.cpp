@@ -14,8 +14,9 @@ bool isActionKatathlipsi();
 void actionKatathlipsi(vector<string>& items, string& picked_item, int extra_hp);
 
 int main() {
+    bool final_action = 'y';
     vector<string> items = {"Pedang"};
-    vector<string> items_pool = {"Armor", "Koin Emas Kuno", "Melati Putih"};
+    vector<string> items_pool = {"Armor", "Koin Emas Kuno"};
     string picked_item = "";
 
     cout << "SELAMAT DATANG DI EARTH ODYSSEY" << endl << endl;
@@ -60,6 +61,17 @@ int main() {
     } else {
         cout << endl << "Icarus tiba ke rumah dan melihat satu-satu nya pembawa kehidupan Icarus pada dunia telah tiada dan memeluk Ibu nya serta tangis tiada henti silir berganti" << endl;
         cout << "FIN" << endl;
+    }
+
+    cout << "Tepat di depan mata terdapat tumbuhan Melati Putih yang menjadi pusat kehidupan alam sekitar" << endl;
+    cout << "Disinilah moral beban Icarus diuji dengan mengkorbankan apa yang semestinya ada atau melawan waktu yang terus berputar" << endl;
+    cout << endl << "[input (y/n)] MENGAMBIL MELATI ATAU MEMBIARKAN APA YANG SUDAH PASTI: ";
+    cin >> final_action;
+
+    if (final_action == 'y') {
+        cout << "Icarus melakukan perjalanan pulang dengan seiring ia berjalan melihat tumbuhan mati satu per satu" << endl << "untuk menyembuhkan sakit seorang malaikat yang membawa kehangatan pertama kali Icarus menghirup udara pada dunia" << endl;
+    }else {
+        cout << "Icarus terus meneteskan air mata selama perjalanan hingga tiba ke rumah ia memeluk erat hangat Ibu yang sudah tiada" << endl;
     }
 
     return 0;
@@ -233,7 +245,7 @@ void actionKatathlipsi(vector<string>& items, string& picked_item, int extra_hp)
     bool is_win = false;
     bool revived = false;
     int hp_icarus = 5 + extra_hp;
-    int hp_katathlipsi = 20;
+    int hp_katathlipsi = 25;
 
     random_device rd;
     mt19937 gen(rd());
