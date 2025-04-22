@@ -10,10 +10,12 @@ bool isActionThymous();
 void actionThymous(int extra_hp);
 bool isActionProsfora();
 void actionProsfora();
+bool isActionKatathlipsi();
+void actionKatathlipsi(vector<string>& items, string& picked_item, int extra_hp);
 
 int main() {
     vector<string> items = {"Pedang"};
-    vector<string> items_pool = {"Armor", "Koin Emas Kuno", "Elixir", "Melati Putih"};
+    vector<string> items_pool = {"Armor", "Koin Emas Kuno", "Melati Putih"};
     string picked_item = "";
 
     cout << "SELAMAT DATANG DI EARTH ODYSSEY" << endl << endl;
@@ -30,6 +32,7 @@ int main() {
     cout << "Tiba Icarus pada kaki gunung yang akan didaki untuk mengambil tumbuhan yang ia butuhkan saat ini" << endl;
 
     int extra_hp = (picked_item == "Armor") ? 1 : 0;
+
     if (isActionThymous()) {
         actionThymous(extra_hp);
     } else {
@@ -52,14 +55,23 @@ int main() {
     cout << "Hingga akhirnya tiba pada puncak gunung yang selama perjalanan ini berlangsung...." << endl;
     cout << "Namun siapa sangka bahwasannya terdapat sosok malaikat pencabut nyawa yang serupa dengan mendiang ayah Icarus yang bernama Katáthlipsi" << endl;
 
+    if (isActionKatathlipsi()) {
+        actionKatathlipsi(items, picked_item, extra_hp);
+    } else {
+        cout << endl << "Icarus tiba ke rumah dan melihat satu-satu nya pembawa kehidupan Icarus pada dunia telah tiada dan memeluk Ibu nya serta tangis tiada henti silir berganti" << endl;
+        cout << "FIN" << endl;
+    }
+
     return 0;
 }
 
 bool isActionArnoumai() {
     cout << "Pada perjalanan awal Icarus menemui raksasa bernama Arnoúmai yang menghalangi perjalanan menuju puncak gunung" << endl;
     char is_fight = 'y';
+
     cout << "[input (y/n)] Melawan Arnoúmai atau Pulang?: ";
     cin >> is_fight;
+
     return is_fight == 'y';
 }
 
@@ -136,8 +148,10 @@ void actionArnoumai(vector<string>& items, vector<string>& items_pool, string& p
 bool isActionThymous() {
     cout << "Dengan kelengahan Icarus suatu monster ras mimic bernama Thymós meniru perawakan Icarus, Ia menghadapi Thymós untuk mempercepat waktu" << endl;
     char is_fight = 'y';
+
     cout << "[input (y/n)] Melawan Thymós atau Pulang?: ";
     cin >> is_fight;
+
     return is_fight == 'y';
 }
 
@@ -203,4 +217,88 @@ bool isActionProsfora() {
     cout << "[input (y/n)] Terima pemberian Prosforá atau pulang?: ";
     cin >> is_fight;
     return is_fight == 'y';
+}
+
+bool isActionKatathlipsi() {
+    char is_fight = 'y';
+
+    cout << "[input (y/n)] Melawan Katáthlipsi atau Pulang?: ";
+    cin >> is_fight;
+
+    return is_fight == 'y';
+}
+
+void actionKatathlipsi(vector<string>& items, string& picked_item, int extra_hp) {
+    char is_action = 'y';
+    bool is_win = false;
+    bool revived = false;
+    int hp_icarus = 5 + extra_hp;
+    int hp_katathlipsi = 20;
+
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> enemy_choice(0, 1);
+
+    cout << endl;
+
+    while (hp_icarus > 0 && hp_katathlipsi > 0) {
+        cout << "Katáthlipsi : ";
+        for (int i = 0; i < hp_katathlipsi; ++i) cout << "♥ ";
+        cout << endl << "Icarus      : ";
+        for (int i = 0; i < hp_icarus; ++i) cout << "♥ ";
+        cout << endl << "---------------------" << endl;
+
+        cout << "[input (1/2)] Serang / Berlindung?: ";
+        cin >> is_action;
+        bool is_defending = (is_action == '2');
+
+        if (is_action == '1') {
+            cout << endl << "Icarus menyerang Katáthlipsi!" << endl;
+            hp_katathlipsi -= 2;
+        } else if (is_defending) {
+            cout << endl << "Icarus bersiap untuk berlindung..." << endl;
+        } else {
+            cout << endl << "Pilihan tidak dikenali! Icarus ragu dan kehilangan kesempatan..." << endl;
+        }
+
+        int move = enemy_choice(gen);
+        if (move == 0) {
+            cout << "Katáthlipsi menyerang!" << endl;
+            if (!is_defending) {
+                hp_icarus--;
+                cout << "Serangan mengenai Icarus!" << endl << endl;
+            } else {
+                cout << "Icarus berhasil menahan serangan" << endl << endl;
+            }
+        } else {
+            cout << "Katáthlipsi lengah..." << endl << endl;
+        }
+
+        if (hp_icarus <= 0 && !revived && find(items.begin(), items.end(), "Koin Emas Kuno") != items.end()) {
+            char use_coin;
+            cout << "Icarus tumbang... Namun Koin Emas Kuno mulai bersinar terang." << endl;
+            cout << "Gunakan Koin Emas Kuno untuk hidup kembali? (y/n): ";
+            cin >> use_coin;
+
+            if (use_coin == 'y') {
+                hp_icarus = 5 + extra_hp;
+                revived = true;
+                cout << "Kekuatan misterius membawa Icarus kembali hidup! Pertarungan berlanjut..." << endl;
+
+                items.erase(remove(items.begin(), items.end(), "Koin Emas Kuno"), items.end());
+            } else {
+                break;
+            }
+        }
+    }
+
+    cout << endl;
+
+    is_win = hp_katathlipsi <= 0;
+
+    if (is_win) {
+        cout << "Icarus berhasil mengalahkan Katáthlipsi dan menuntuskan tugas akhir yang ia perjuangkan sejauh ini...." << endl;
+    } else {
+        cout << "Icarus gagal dalam perjuangannya dan tidak mampu menyelamatkan ibunya..." << endl;
+    }
 }
